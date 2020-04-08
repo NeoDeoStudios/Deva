@@ -13,4 +13,8 @@ public class ButtonsLink : MonoBehaviour
     {
         Application.OpenURL("https://neo-deo-studios.itch.io/");
     }
+    public void onClickWebpage()
+    {
+        Application.OpenURL("https://neodeostudios.github.io/Portfolio/");
+    }
 }
