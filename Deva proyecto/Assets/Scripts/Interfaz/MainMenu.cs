@@ -192,10 +192,10 @@ public class MainMenu : MonoBehaviour
 
     public void changeColorYellow()
     {   //Get the animator
-        Animator anim = GameObject.Find("PlayButton").GetComponent<Animator>();
+        //Animator anim = GameObject.Find("PlayButton").GetComponent<Animator>();
         // Actually i was using "Resources" folder in assets folder. And i was loading animation by this way.
-        anim.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("AnimacionesDeva/AngryBreathing/angry-deva0004");
-        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("AnimacionesDeva/AngryBreathing/angry-deva0001");
+        //anim.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("AnimacionesDeva/AngryBreathing/angry-deva0004");
+        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/deva-yellow");
         notificacion.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/notificacion-yellow");
         GameObject.Find("EmailButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/bandeja-yellow");
         GameObject.Find("TesterButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/tester-yellow");
@@ -223,10 +223,10 @@ public class MainMenu : MonoBehaviour
     public void changeColorRed()
     {
         //Get the animator
-        Animator anim = GameObject.Find("PlayButton").GetComponent<Animator>();
+        //Animator anim = GameObject.Find("PlayButton").GetComponent<Animator>();
         // Actually i was using "Resources" folder in assets folder. And i was loading animation by this way.
-        anim.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("AnimacionesDeva/Orbiting/deva-orbiting0045");
-        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("AnimacionesDeva/Orbiting/deva-orbiting0001");
+        //anim.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("AnimacionesDeva/Orbiting/deva-orbiting0045");
+        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/deva-red");
         notificacion.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/notificacion-red");
         GameObject.Find("EmailButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/bandeja-red");
         GameObject.Find("TesterButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/tester-red");
@@ -254,10 +254,10 @@ public class MainMenu : MonoBehaviour
     public void changeColorPink()
     {
         //Get the animator
-        Animator anim = GameObject.Find("PlayButton").GetComponent<Animator>();
+        //Animator anim = GameObject.Find("PlayButton").GetComponent<Animator>();
         // Actually i was using "Resources" folder in assets folder. And i was loading animation by this way.
-        anim.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("AnimacionesDeva/LoveBreathing/love-deva0015");
-        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("AnimacionesDeva/LoveBreathing/love-deva0001");
+        //anim.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("AnimacionesDeva/LoveBreathing/love-deva0015");
+        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/deva-pink");
         notificacion.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/notificacion-pink");
         GameObject.Find("EmailButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/bandeja-pink");
         GameObject.Find("TesterButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/tester-pink");
@@ -285,10 +285,10 @@ public class MainMenu : MonoBehaviour
     public void changeColorBlue()
     {
         //Get the animator
-        Animator anim = GameObject.Find("PlayButton").GetComponent<Animator>();
+        //Animator anim = GameObject.Find("PlayButton").GetComponent<Animator>();
         // Actually i was using "Resources" folder in assets folder. And i was loading animation by this way.
-        anim.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("AnimacionesDeva/SadBreathing/sad-deva0065");
-        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("AnimacionesDeva/SadBreathing/sad-deva0001");
+        //anim.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("AnimacionesDeva/SadBreathing/sad-deva0065");
+        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/deva-pink");
         notificacion.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/notificacion-blue");
         GameObject.Find("EmailButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/bandeja-blue");
         GameObject.Find("TesterButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/tester-blue");
@@ -315,6 +315,7 @@ public class MainMenu : MonoBehaviour
 
     public void finalSadness()
     {
+        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/deva-blue");
         GameObject.Find("PlayButton").GetComponent<Button>().interactable = false;
         GameObject.Find("EmailButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/reset-blue");
         GameObject.Find("TesterButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/reset-blue");
