@@ -7,9 +7,9 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject menu, contactMenu, testerMenu, emailMenu, informeMenu, historialMenu, pestanaIzq, pestanaDer, notificacion;
+    public GameObject menu, contactMenu, ajustesMenu, testerMenu, emailMenu, informeMenu, historialMenu, pestanaIzq, pestanaDer, notificacion;
     public PestanasMenu pestanas;
-    bool actTesterMenu, actEmailMenu, actContactMenu, changeScene = false;
+    bool actTesterMenu, actEmailMenu, actContactMenu, actAjustesMenu, changeScene = false;
     static bool change = false;
     bool changeColor = true;
     string title, asunto, text;
@@ -23,6 +23,7 @@ public class MainMenu : MonoBehaviour
         GameObject.Find("EmailButton").GetComponent<Button>().onClick.AddListener(activeEmailMenu);
         GameObject.Find("TesterButton").GetComponent<Button>().onClick.AddListener(activeTesterMenu);
         GameObject.Find("ContactButton").GetComponent<Button>().onClick.AddListener(activeContactMenu);
+        GameObject.Find("AjustesButton").GetComponent<Button>().onClick.AddListener(activeAjustesMenu);
     }
     public void Update()
     {
@@ -134,6 +135,15 @@ public class MainMenu : MonoBehaviour
                 actContactMenu = false;
             }
         }
+        else if (actAjustesMenu)
+        {
+            if (change)
+            {
+                ajustesMenu.gameObject.SetActive(true);
+                menu.gameObject.SetActive(false);
+                actAjustesMenu = false;
+            }
+        }
         else if (changeScene)
         {
             if (change)
@@ -179,6 +189,11 @@ public class MainMenu : MonoBehaviour
         actTesterMenu = true;
     }
 
+    public void activeAjustesMenu()
+    {
+        actAjustesMenu = true;
+    }
+
     public void activeEmailMenu()
     {
         actEmailMenu = true;
@@ -199,6 +214,7 @@ public class MainMenu : MonoBehaviour
         notificacion.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/notificacion-yellow");
         GameObject.Find("EmailButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/bandeja-yellow");
         GameObject.Find("TesterButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/tester-yellow");
+        GameObject.Find("AjustesButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/ajustes_yellow");
         //GameObject.Find("TwitterBtn").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/twitterImageYellow");
         //GameObject.Find("ItchioBtn").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/itchioImageYellow");
         pestanaDer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/pestaña-derecha-yellow");
@@ -218,6 +234,8 @@ public class MainMenu : MonoBehaviour
         botonesInforme[botonesInforme.Length-1].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/volver-yellow");
         Button[] botonesEmail = emailMenu.gameObject.GetComponentsInChildren<Button>();
         botonesEmail[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/volver-yellow");
+        Button[] botonesAjustes = ajustesMenu.gameObject.GetComponentsInChildren<Button>();
+        botonesAjustes[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaYellow/volver-yellow");
     }
 
     public void changeColorRed()
@@ -230,6 +248,7 @@ public class MainMenu : MonoBehaviour
         notificacion.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/notificacion-red");
         GameObject.Find("EmailButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/bandeja-red");
         GameObject.Find("TesterButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/tester-red");
+        GameObject.Find("AjustesButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/ajustes_red");
         //GameObject.Find("TwitterBtn").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/twitterImage");
         //GameObject.Find("ItchioBtn").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/itchioImage");
         pestanaDer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/pestaña-derecha-red");
@@ -249,6 +268,8 @@ public class MainMenu : MonoBehaviour
         botonesInforme[botonesInforme.Length - 1].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/volver-red");
         Button[] botonesEmail = emailMenu.gameObject.GetComponentsInChildren<Button>();
         botonesEmail[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/volver-red");
+        Button[] botonesAjustes = ajustesMenu.gameObject.GetComponentsInChildren<Button>();
+        botonesAjustes[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaRed/volver-red");
     }
 
     public void changeColorPink()
@@ -261,6 +282,7 @@ public class MainMenu : MonoBehaviour
         notificacion.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/notificacion-pink");
         GameObject.Find("EmailButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/bandeja-pink");
         GameObject.Find("TesterButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/tester-pink");
+        GameObject.Find("AjustesButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/ajustes_pink");
         //GameObject.Find("TwitterBtn").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/twitterImagePink");
         //GameObject.Find("ItchioBtn").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/itchioImagePink");
         pestanaDer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/pestaña-derecha-pink");
@@ -280,6 +302,8 @@ public class MainMenu : MonoBehaviour
         botonesInforme[botonesInforme.Length - 1].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/volver-pink");
         Button[] botonesEmail = emailMenu.gameObject.GetComponentsInChildren<Button>();
         botonesEmail[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/volver-pink");
+        Button[] botonesAjustes = ajustesMenu.gameObject.GetComponentsInChildren<Button>();
+        botonesAjustes[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/volver-pink");
     }
 
     public void changeColorBlue()
@@ -288,10 +312,11 @@ public class MainMenu : MonoBehaviour
         //Animator anim = GameObject.Find("PlayButton").GetComponent<Animator>();
         // Actually i was using "Resources" folder in assets folder. And i was loading animation by this way.
         //anim.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("AnimacionesDeva/SadBreathing/sad-deva0065");
-        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/deva-pink");
+        GameObject.Find("PlayButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/deva-blue");
         notificacion.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/notificacion-blue");
         GameObject.Find("EmailButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/bandeja-blue");
         GameObject.Find("TesterButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/tester-blue");
+        GameObject.Find("AjustesButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/ajustes_blue");
         //GameObject.Find("TwitterBtn").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/twitterImageBlue");
         //GameObject.Find("ItchioBtn").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/itchioImageBlue");
         pestanaDer.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/pestaña-derecha-blue");
@@ -311,6 +336,8 @@ public class MainMenu : MonoBehaviour
         botonesInforme[botonesInforme.Length - 1].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/volver-blue");
         Button[] botonesEmail = emailMenu.gameObject.GetComponentsInChildren<Button>();
         botonesEmail[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/volver-blue");
+        Button[] botonesAjustes = ajustesMenu.gameObject.GetComponentsInChildren<Button>();
+        botonesAjustes[0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/volver-blue");
     }
 
     public void finalSadness()
@@ -319,6 +346,7 @@ public class MainMenu : MonoBehaviour
         GameObject.Find("PlayButton").GetComponent<Button>().interactable = false;
         GameObject.Find("EmailButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/reset-blue");
         GameObject.Find("TesterButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/reset-blue");
+        GameObject.Find("AjustesButton").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaBlue/reset-blue");
         GameObject.Find("EmailButton").GetComponent<Button>().onClick.RemoveListener(activeEmailMenu);
         GameObject.Find("ContactButton").GetComponent<Button>().onClick.RemoveListener(activeContactMenu);
         GameObject.Find("EmailButton").GetComponent<Button>().onClick.AddListener(GameState.gameState.reset);
