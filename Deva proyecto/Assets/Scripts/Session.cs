@@ -12,7 +12,7 @@ public class Session : MonoBehaviour
     private static GameObject b1Text, b2Text, b3Text, b4Text;
     private GameObject prueba;
     public Store store = new Store();
-    private static bool nextQ;
+    private static bool nextQ = false;
     private static int currentQ;
     public questionAnim qAnim;
     private static int response;
@@ -22,7 +22,7 @@ public class Session : MonoBehaviour
     public static GameObject deva;
     private GameObject sesion;
     private static string[] splitQuestion;
-    private static string[] splitResponse;
+    private static string[] splitResponse = new string[] { };
     private static int qLineCount = 0;
     private static int rLineCount = 0;
     private static bool changed = false;
@@ -31,6 +31,10 @@ public class Session : MonoBehaviour
     private static int previous;
     private static bool previousChecked = false;
     private static bool skip = false;
+    private static bool preguntada = false;
+    private static bool respondiendo = false;
+    private static bool enviado = false;
+    private static bool desactivar = false;
     public Store storeTest;
     public PestanasDeva pestanas;
     private bool cambiarMenu=false;
@@ -46,6 +50,8 @@ public class Session : MonoBehaviour
     private bool added = false;
     Color normal;
     Color highlight;
+    Color clear;
+    Color alpha;
     private bool sorpresa = false;
     private static bool sorpresaHecha = false;
     public AudioSource source { get { return GetComponent<AudioSource>(); } }
@@ -62,6 +68,8 @@ public class Session : MonoBehaviour
         hatred = GameState.gameState.hatred;
         stability = GameState.gameState.stability;
         neutral = GameState.gameState.neutral;
+
+        desactivar = false;
 
         if (!sorpresaHecha)
         {
@@ -88,8 +96,7 @@ public class Session : MonoBehaviour
             previous = GameState.gameState.previous;
         }
         question = GameObject.Find("Question").GetComponentInChildren<Text>();
-        qAnim.FadeIn();
-
+        clear = new Color(0.2745f, 0.2745f, 0.2745f, 1.0f);
 
         b1Text = GameObject.Find("1");
         b2Text = GameObject.Find("2");
@@ -103,6 +110,12 @@ public class Session : MonoBehaviour
         b3Text.GetComponentInChildren<Button>().interactable = false;
         b4Text.GetComponentInChildren<Button>().interactable = false;
 
+        b1Text.GetComponentInChildren<Text>().color = clear;
+        b2Text.GetComponentInChildren<Text>().color = clear;
+        b3Text.GetComponentInChildren<Text>().color = clear;
+        b4Text.GetComponentInChildren<Text>().color = clear;
+
+
         deva.GetComponentInChildren<Button>().interactable = false;
 
         b1Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[0];
@@ -110,10 +123,21 @@ public class Session : MonoBehaviour
         b3Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[2];
         b4Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[3];
         sesion.GetComponentInChildren<Text>().text = ("SESIÓN " + currentSession);
+
         splitQuestion = splitString(store.pool.questions[currentQ].question);
 
         normal = new Color(0.772f, 0.772f, 0.772f, 1.0f);
+        
         highlight = question.color;
+
+        if(currentQ == 0)
+        {
+            question.text = splitQuestion[0];
+        }
+        else
+        {
+            question.text = splitQuestion[0];
+        }
 
         switch (decision)
         {
@@ -138,6 +162,7 @@ public class Session : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Respondiendo " + respondiendo);
         Debug.Log("love: " + love + "hatred: " + hatred + "sadness: " + sadness + "stability: " + stability);
         //Cambio entre escenas
  
@@ -175,52 +200,225 @@ public class Session : MonoBehaviour
             }
             if (!cambiarMenu)
             {
-
-                if (qLineCount < splitQuestion.Length)
-                {
-                    if (Input.GetMouseButtonDown(0) && !asked && !nextQ && qAnim.questionAnimator.GetBool("next2"))
-                    {
-                        if (qLineCount != splitQuestion.Length - 1)
-                        {
-                            qAnim.FadeOut();
-                            changed = false;
-                        }
-                        else
-                        {
-                            qAnim.FadeOut();
-                            qAnim.questionAnimator.SetBool("nextLine", false);
-                            asked = true;
-                        }
-                    }
-                }
-            if (!cambiar)
+            Debug.Log(respondiendo);
+            if (respondiendo)
             {
-                if (qAnim.questionAnimator.GetBool("changeQuestion") && !changed && qLineCount < splitQuestion.Length - 1 && !asked && !nextQ)
+                question.color = clear;
+                qLineCount = 0;
+                b1Text.GetComponentInChildren<Text>().color = highlight;
+                b2Text.GetComponentInChildren<Text>().color = highlight;
+                b3Text.GetComponentInChildren<Text>().color = highlight;
+                b4Text.GetComponentInChildren<Text>().color = highlight;
+
+                b1Text.GetComponentInChildren<Button>().interactable = true;
+                b2Text.GetComponentInChildren<Button>().interactable = true;
+                b3Text.GetComponentInChildren<Button>().interactable = true;
+                b4Text.GetComponentInChildren<Button>().interactable = true;
+            }
+
+            Debug.Log("ey");
+            if (rLineCount == 0 && respondiendo && enviado)
+            {
+                enviado = false;
+                splitResponse = splitString(store.genericResponses.cResponse[currentQ].cResponse[response - 1]);
+                if (!added)
                 {
-                    qLineCount++;
-                    if (currentQ == 53 && hatred >= 1000 && qLineCount == 32)
+                    GameState.gameState.listaCRespuestas.Add(store.genericResponses.cResponse[currentQ].cResponse[response - 1]);
+                    GameState.gameState.listaRespuestas.Add(store.pool.questions[currentQ].answer[response - 1]);
+                    GameState.gameState.listaPreguntas.Add(store.pool.questions[currentQ].question);
+                    added = true;
+                }
+
+                if (currentQ == 4 && response == 1)
+                {
+                    previous = response;
+                }
+                if (currentQ == 5 && response != previous)
+                {
+                    store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Pero eso no tiene sentido./A no ser que te guste la incomodidad, claro.";
+                }
+                if (currentQ == 9)
+                {
+                    previous = response;
+                }
+                if (currentQ == 10 && !previousChecked)
+                {
+                    if (response == previous)
                     {
-                        ///AQUI SERIA PONER QUE SE CIERREN LAS PESTAÑAS SE ABRAN Y SALGA ODIO
-                        /*
-                        decision = "Hatred";
-                        pestanas.cerrarPestanas();*/
+                        store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Eso es fantástico, me alegro mucho por ti.";
+                        previousChecked = true;
                     }
-                    question.text = splitQuestion[qLineCount];
-                    changed = true;
+                    else if (response < previous)
+                    {
+                        store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Oh.Lo siento mucho./En la medida en la que puedo sentir.";
+                        previousChecked = true;
+                    }
+                    else
+                    {
+                        store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Eso no tiene sentido./Por favor, si quieres que esto funcione, no me mientas.";
+                        previousChecked = true;
+                    }
+                }
+                if (currentQ == 11)
+                {
+                    if (response == 2)
+                    {
+                        store.genericResponses.cResponse[currentQ].cResponse[response - 1] = store.genericResponses.cResponse[currentQ + 1].cResponse[response - 1];
+                        skip = true;
+                    }
                 }
 
-                if (nextQ && qAnim.questionAnimator.GetBool("next2"))
+                if (currentQ == 19)
                 {
-                    deva.GetComponentInChildren<Button>().interactable = true;
-                }
-                else
-                {
-                    deva.GetComponentInChildren<Button>().interactable = false;
+                    if (response == 2)
+                    {
+                        skip = true;
+                    }
                 }
 
-                if (nextQ == false)
+                if (currentQ == 25)
                 {
-                    if (!qAnim.questionAnimator.GetBool("next") && !asked && !qAnim.questionAnimator.GetBool("next2"))
+                    if (response == 2)
+                    {
+                        skip = true;
+                    }
+                }
+
+                if (currentQ == 29)
+                {
+                    if (response == 2)
+                    {
+                        skip = true;
+                    }
+                }
+                if (currentQ == 28)
+                {
+                    if (response == 2)
+                    {
+                        goBack = true;
+                    }
+                }
+                if (currentQ == 31)
+                {
+                    if (response == 2)
+                    {
+                        skip = true;
+                    }
+                }
+
+                if (currentQ == 39)
+                {
+                    if (response == 2)
+                    {
+                        skip = true;
+                    }
+                }
+                if (!emotionsChecked)
+                {
+                    love += store.genericResponses.cResponse[currentQ].karma[response - 1][0];
+                    sadness += store.genericResponses.cResponse[currentQ].karma[response - 1][1];
+                    hatred += store.genericResponses.cResponse[currentQ].karma[response - 1][2];
+                    stability += store.genericResponses.cResponse[currentQ].karma[response - 1][3];
+                    neutral += store.genericResponses.cResponse[currentQ].karma[response - 1][4];
+
+                    if (currentQ == 47)
+                    {
+                        emotions = new List<int>();
+                        emotions.Add(love);
+                        emotions.Add(sadness);
+                        emotions.Add(hatred);
+                        emotions.Add(stability);
+                        emotions.Sort();
+                        emotions.Reverse();
+                        if (emotions[0] == love)
+                        {
+                            store.loveDecission();
+                        }
+                        else if (emotions[0] == sadness)
+                        {
+                            store.sadnessDecission();
+                        }
+                        else if (emotions[0] == hatred)
+                        {
+                            store.hateDecission();
+                        }
+                        else if (emotions[0] == stability)
+                        {
+                            store.stabilityDecission();
+                        }
+                    }
+
+                    if (currentQ == 48)
+                    {
+                        emotions = new List<int>();
+                        emotions.Add(love);
+                        emotions.Add(sadness);
+                        emotions.Add(hatred);
+                        emotions.Add(stability);
+                        emotions.Add(neutral);
+                        emotions.Sort();
+                        emotions.Reverse();
+                        if (emotions[0] == love)
+                        {
+                            store.initLove();
+                            decision = "Love";
+                        }
+                        else if (emotions[0] == sadness)
+                        {
+                            store.initSadness();
+                            decision = "Sadness";
+                        }
+                        else if (emotions[0] == hatred)
+                        {
+                            store.initHatred();
+                            decision = "Hatred";
+                        }
+                        else if (emotions[0] == stability)
+                        {
+                            store.initStability();
+                            decision = "Stability";
+                        }
+                        else if (emotions[0] == neutral)
+                        {
+                            store.initNeutral();
+                            decision = "Neutral";
+                        }
+                    }
+
+
+                    emotionsChecked = true;
+                }
+                respondiendo = false;
+                question.text = splitResponse[rLineCount];
+                question.color = normal;
+                b1Text.GetComponentInChildren<Text>().color = clear;
+                b2Text.GetComponentInChildren<Text>().color = clear;
+                b3Text.GetComponentInChildren<Text>().color = clear;
+                b4Text.GetComponentInChildren<Text>().color = clear;
+            }
+            if (Input.GetMouseButtonDown(0) && !respondiendo && !desactivar)
+                {
+                    if (qLineCount == splitQuestion.Length - 1 && !preguntada)
+                    {
+                        respondiendo = true;
+                        question.color = Color.clear;
+                    }
+                
+
+                if (qLineCount < splitQuestion.Length - 1 && !preguntada)
+                    {
+                        qLineCount++;
+                        if (currentQ == 53 && hatred >= 1000 && qLineCount == 32)
+                        {
+                            ///AQUI SERIA PONER QUE SE CIERREN LAS PESTAÑAS SE ABRAN Y SALGA ODIO
+                            /*
+                            decision = "Hatred";
+                            pestanas.cerrarPestanas();*/
+                        }
+                        question.text = splitQuestion[qLineCount];
+                    }
+
+                    if (!preguntada && !respondiendo)
                     {
                         if (currentQ == 14 && previousChecked == false)
                         {
@@ -296,233 +494,222 @@ public class Session : MonoBehaviour
                                 splitQuestion = splitString(store.pool.questions[currentQ].question);
                                 previousChecked = true;
                             }
+                            question.text = splitQuestion[qLineCount];
                         }
+                                             
+                    }
+                    else if
+                     (preguntada)
+                {
+                    
+                    if (rLineCount < splitResponse.Length - 1)
+                    {
+                        if (!respondiendo)
+                        {
+                            rLineCount++;
+                            question.text = splitResponse[rLineCount];
+                        }
+                    }
+                    else
+                    {
+                        //changed = false;
+                        rLineCount = 0;
+                        if (!skip)
+                        {
+                            currentQ++;
+                        }
+                        else
+                        {
+                            currentQ += 2;
+                            skip = false;
+                        }
+                        if (goBack)
+                        {
+                            currentQ--;
+                            currentSession--;
+                            pestanas.abrirPestanas();
+                            GameState.gameState.store = store;
+                            cambiarMenu = true;
+                        }
+                        if (currentQ == 59)
+                        {
+                            if ((currentQ - startQ) > qNumbers[currentSession])
+                            {
+
+                                if (currentQ > 58 && stability >= 1000)
+                                {
+                                    store.estabilidadInfinito();
+                                }
+
+                                if (currentQ > 58 && hatred >= 1000)
+                                {
+                                    store.odioInfinito();
+                                }
+
+                                if (currentQ > 58 && love >= 1000)
+                                {
+                                    store.amorInfinito();
+                                }
+                            }
+                        }
+                        else if (currentQ > 59)
+                        {
+                            if ((currentQ - startQ) > 0)
+                            {
+                                if (stability >= 1000)
+                                {
+                                    store.estabilidadInfinito();
+                                }
+
+                                if (hatred >= 1000)
+                                {
+                                    store.odioInfinito();
+                                }
+                            }
+
+                            if (love >= 1000)
+                            {
+                                if (!sorpresa)
+                                {
+                                    if ((currentQ - startQ) > 2)
+                                    {
+                                        store.amorInfinito();
+                                    }
+                                }
+                                else
+                                {
+                                    if ((currentQ - startQ) > 1)
+                                    {
+                                        store.amorInfinito();
+                                    }
+                                }
+                            }
+
+                        }
+                        splitQuestion = splitString(store.pool.questions[currentQ].question);
                         question.text = splitQuestion[qLineCount];
-                        qAnim.FadeIn();
-                    }
-                    if (qAnim.questionAnimator.GetBool("next") && asked)
-                    {
                         qLineCount = 0;
-                        qAnim.FadeOut();
-                        rAnim.b1FadeIn();
-                        b1Text.GetComponentInChildren<Text>().color = normal;
-                        b2Text.GetComponentInChildren<Text>().color = normal;
-                        b3Text.GetComponentInChildren<Text>().color = normal;
-                        b4Text.GetComponentInChildren<Text>().color = normal;
-
-                    }
-                    if (rAnim.b1Anim.GetBool("next"))
-                    {
-                        rAnim.b4FadeIn();
-                    }
-                    if (rAnim.b4Anim.GetBool("next"))
-                    {
-                        rAnim.b2FadeIn();
-                    }
-                    if (rAnim.b2Anim.GetBool("next"))
-                    {
-                        rAnim.b3FadeIn();
-                    }
-                    if (rAnim.b3Anim.GetBool("next"))
-                    {
-                        b1Text.GetComponentInChildren<Text>().color = highlight;
-                        b2Text.GetComponentInChildren<Text>().color = highlight;
-                        b3Text.GetComponentInChildren<Text>().color = highlight;
-                        b4Text.GetComponentInChildren<Text>().color = highlight;
-
-                        b1Text.GetComponentInChildren<Button>().interactable = true;
-                        b2Text.GetComponentInChildren<Button>().interactable = true;
-                        if (b3Text.GetComponentInChildren<Text>().text != "") { b3Text.GetComponentInChildren<Button>().interactable = true; };
-                        if (b4Text.GetComponentInChildren<Text>().text != "") { b4Text.GetComponentInChildren<Button>().interactable = true; };
+                        nextQ = false;
+                        asked = false;
+                        preguntada = false;
+                        respondiendo = false;
+                        enviado = false;
+                        changeQuestion();
+                        deva.GetComponentInChildren<Button>().interactable = false;
                     }
                 }
-                else if
-                 (!qAnim.questionAnimator.GetBool("next2") && nextQ && changed)
-                {
-                    Debug.Log("ey");
-                    if (rLineCount == 0)
-                    {
-                        splitResponse = splitString(store.genericResponses.cResponse[currentQ].cResponse[response - 1]);
-                        if (!added)
-                        {
-                            GameState.gameState.listaCRespuestas.Add(store.genericResponses.cResponse[currentQ].cResponse[response - 1]);
-                            GameState.gameState.listaRespuestas.Add(store.pool.questions[currentQ].answer[response - 1]);
-                            GameState.gameState.listaPreguntas.Add(store.pool.questions[currentQ].question);
-                            added = true;
-                        }
 
-                        if (currentQ == 4 && response == 1)
+                    
+                }
+
+                /*if (qLineCount < splitQuestion.Length)
+                {
+                    if (Input.GetMouseButtonDown(0) && !asked && !nextQ)
+                    {
+                        if (qLineCount != splitQuestion.Length - 1)
                         {
-                            previous = response;
+                            //changed = false;
                         }
-                        if (currentQ == 5 && response != previous)
+                        else
                         {
-                            store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Pero eso no tiene sentido./A no ser que te guste la incomodidad, claro.";
+                            asked = true;
                         }
-                        if (currentQ == 9)
+                    if (rLineCount != splitResponse.Length - 1)
+                    {
+                        //changed = false;
+                    }
+                    else
+                    {
+                        if (nextQ)
                         {
-                            previous = response;
-                        }
-                        if (currentQ == 10 && !previousChecked)
-                        {
-                            if (response == previous)
+                            //changed = false;
+                            rLineCount = 0;
+                            if (!skip)
                             {
-                                store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Eso es fantástico, me alegro mucho por ti.";
-                                previousChecked = true;
-                            }
-                            else if (response < previous)
-                            {
-                                store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Oh.Lo siento mucho./En la medida en la que puedo sentir.";
-                                previousChecked = true;
+                                currentQ++;
                             }
                             else
                             {
-                                store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Eso no tiene sentido./Por favor, si quieres que esto funcione, no me mientas.";
-                                previousChecked = true;
+                                currentQ += 2;
+                                skip = false;
                             }
-                        }
-                        if (currentQ == 11)
-                        {
-                            if (response == 2)
+                            if (goBack)
                             {
-                                store.genericResponses.cResponse[currentQ].cResponse[response - 1] = store.genericResponses.cResponse[currentQ + 1].cResponse[response - 1];
-                                skip = true;
+                                currentQ--;
+                                currentSession--;
+                                pestanas.abrirPestanas();
+                                GameState.gameState.store = store;
+                                cambiarMenu = true;
                             }
-                        }
+                            if (currentQ == 59)
+                            {
+                                if ((currentQ - startQ) > qNumbers[currentSession])
+                                {
 
-                        if (currentQ == 19)
-                        {
-                            if (response == 2)
-                            {
-                                skip = true;
-                            }
-                        }
+                                    if (currentQ > 58 && stability >= 1000)
+                                    {
+                                        store.estabilidadInfinito();
+                                    }
 
-                        if (currentQ == 25)
-                        {
-                            if (response == 2)
-                            {
-                                skip = true;
-                            }
-                        }
+                                    if (currentQ > 58 && hatred >= 1000)
+                                    {
+                                        store.odioInfinito();
+                                    }
 
-                        if (currentQ == 29)
-                        {
-                            if (response == 2)
-                            {
-                                skip = true;
+                                    if (currentQ > 58 && love >= 1000)
+                                    {
+                                        store.amorInfinito();
+                                    }
+                                }
                             }
-                        }
-                        if (currentQ == 28)
-                        {
-                            if (response == 2)
+                            else if (currentQ > 59)
                             {
-                                goBack = true;
-                            }
-                        }
-                        if (currentQ == 31)
-                        {
-                            if (response == 2)
-                            {
-                                skip = true;
-                            }
-                        }
+                                if ((currentQ - startQ) > 0)
+                                {
+                                    if (stability >= 1000)
+                                    {
+                                        store.estabilidadInfinito();
+                                    }
 
-                        if (currentQ == 39)
-                        {
-                            if (response == 2)
-                            {
-                                skip = true;
+                                    if (hatred >= 1000)
+                                    {
+                                        store.odioInfinito();
+                                    }
+                                }
+
+                                if (love >= 1000)
+                                {
+                                    if (!sorpresa)
+                                    {
+                                        if ((currentQ - startQ) > 2)
+                                        {
+                                            store.amorInfinito();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if ((currentQ - startQ) > 1)
+                                        {
+                                            store.amorInfinito();
+                                        }
+                                    }
+                                }
+
                             }
+                            splitQuestion = splitString(store.pool.questions[currentQ].question);
+                            qLineCount = 0;
+                            nextQ = false;
+                            asked = false;
+                            changeQuestion();
+                            deva.GetComponentInChildren<Button>().interactable = false;
                         }
-                        if (!emotionsChecked)
-                        {
-                            love += store.genericResponses.cResponse[currentQ].karma[response - 1][0];
-                            sadness += store.genericResponses.cResponse[currentQ].karma[response - 1][1];
-                            hatred += store.genericResponses.cResponse[currentQ].karma[response - 1][2];
-                            stability += store.genericResponses.cResponse[currentQ].karma[response - 1][3];
-                            neutral += store.genericResponses.cResponse[currentQ].karma[response - 1][4];
-
-                            if (currentQ == 47)
-                            {
-                                emotions = new List<int>();
-                                emotions.Add(love);
-                                emotions.Add(sadness);
-                                emotions.Add(hatred);
-                                emotions.Add(stability);
-                                emotions.Sort();
-                                emotions.Reverse();
-                                if (emotions[0] == love)
-                                {
-                                    store.loveDecission();
-                                }
-                                else if (emotions[0] == sadness)
-                                {
-                                    store.sadnessDecission();
-                                }
-                                else if (emotions[0] == hatred)
-                                {
-                                    store.hateDecission();
-                                }
-                                else if (emotions[0] == stability)
-                                {
-                                    store.stabilityDecission();
-                                }
-                            }
-
-                            if (currentQ == 48)
-                            {
-                                emotions = new List<int>();
-                                emotions.Add(love);
-                                emotions.Add(sadness);
-                                emotions.Add(hatred);
-                                emotions.Add(stability);
-                                emotions.Add(neutral);
-                                emotions.Sort();
-                                emotions.Reverse();
-                                if (emotions[0] == love)
-                                {
-                                    store.initLove();
-                                    decision = "Love";
-                                }
-                                else if (emotions[0] == sadness)
-                                {
-                                    store.initSadness();
-                                    decision = "Sadness";
-                                }
-                                else if (emotions[0] == hatred)
-                                {
-                                    store.initHatred();
-                                    decision = "Hatred";
-                                }
-                                else if (emotions[0] == stability)
-                                {
-                                    store.initStability();
-                                    decision = "Stability";
-                                }
-                                else if (emotions[0] == neutral)
-                                {
-                                    store.initNeutral();
-                                    decision = "Neutral";
-                                }
-                            }
-
-
-                            emotionsChecked = true;
-                        }
+                        else { }
                     }
-                    question.text = splitResponse[rLineCount];
-                    qAnim.questionAnimator.SetBool("nextLine", true);
-                    qAnim.FadeIn();
-                    //changed = false;
                 }
-
-                if (qAnim.questionAnimator.GetBool("changeQuestion") && !changed && rLineCount < splitResponse.Length - 1 && nextQ)
-                {
-                    rLineCount++;
-                    question.text = splitResponse[rLineCount];
-                    changed = true;
-                }
+                }*/
+            if (!cambiar)
+            {
+                
             }
         }
         
@@ -530,24 +717,28 @@ public class Session : MonoBehaviour
 
     public void buttonPressed()
     {
-        
+        preguntada = true;
         nextQ = true;
-            asked = false;
-        //qAnim.FadeOut();
-        rAnim.b1FadeOut();
-            rAnim.b2FadeOut();
-            rAnim.b3FadeOut();
-            rAnim.b4FadeOut();
+        asked = false;
+        qLineCount = 0;
+        enviado = true;
+
+        //question.color = highlight;
+
             string name = EventSystem.current.currentSelectedGameObject.name;
             response = int.Parse(name);
             EventSystem.current.currentSelectedGameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/boton-pulsado");
             EventSystem.current.currentSelectedGameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/boton-sinpulsar");
+        clear = new Color(0.2745f, 0.2745f, 0.2745f, 1.0f);
+        
 
-            b1Text.GetComponent<Button>().interactable = false;
+        
+
+        b1Text.GetComponent<Button>().interactable = false;
             b2Text.GetComponent<Button>().interactable = false;
             b3Text.GetComponent<Button>().interactable = false;
             b4Text.GetComponent<Button>().interactable = false;
-            changed = true;
+        //changed = true;
 
         if (currentQ == 13)
         {
@@ -566,8 +757,6 @@ public class Session : MonoBehaviour
         nextQ = false;
         emotionsChecked = false;
         added = false;
-        qAnim.FadeOut();
-        //qAnim.questionAnimator.SetBool("nextLine", false);
         b1Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[0];
         b2Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[1];
         b3Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[2];
@@ -640,6 +829,8 @@ public class Session : MonoBehaviour
         {
             if ((currentQ - startQ) > qNumbers[currentSession])
             {
+                question.color = clear;
+                desactivar = true;
                 cambiar = true;
                 GameState.gameState.decision = decision;
                 GameState.gameState.currentQ = currentQ;
@@ -662,14 +853,13 @@ public class Session : MonoBehaviour
     {
             if (rLineCount != splitResponse.Length - 1)
             {
-                qAnim.FadeOut();
-                changed = false;
+                //changed = false;
             }
         else
         {
             if (nextQ)
             {
-                changed = false;
+                //changed = false;
                 rLineCount = 0;
                 if (!skip)
                 {
@@ -749,6 +939,7 @@ public class Session : MonoBehaviour
                 changeQuestion();
                 deva.GetComponentInChildren<Button>().interactable = false;
             }
+            else { }
         }
     }
 
@@ -784,7 +975,7 @@ public class Session : MonoBehaviour
     {
         //Get the animator
         // Actually i was using "Resources" folder in assets folder. And i was loading animation by this way.
-        GameObject.Find("Deva").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/DevaPink");
+        GameObject.Find("Deva").GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/deva-pink");
         pestanas.pestanaDerecha.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/pestaña-derecha-pink");
         pestanas.pestanaIzquierda.GetComponent<Image>().sprite = Resources.Load<Sprite>("Images/DevaPink/pestaña-izquierda-pink");
     }
