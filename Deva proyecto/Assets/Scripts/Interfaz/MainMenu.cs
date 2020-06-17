@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
     bool mensajeEnviado = false;
     bool reseteo = false;
     bool desactivado = false;
+    public GameObject resetButton;
 
 
     private void Awake()
@@ -29,7 +30,7 @@ public class MainMenu : MonoBehaviour
     {
         if (GameState.gameState.devaEscape && !desactivado)
         {
-            GameObject.Find("ResetButton").SetActive(false);
+            //resetButton.gameObject.SetActive(false);
             desactivado = true;
         }
         if (GameState.gameState.decision == "Neutral" && GameState.gameState.currentQ > 53 && !mensajeEnviado)

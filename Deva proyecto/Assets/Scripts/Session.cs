@@ -38,7 +38,7 @@ public class Session : MonoBehaviour
     public Store storeTest;
     public PestanasDeva pestanas;
     private bool cambiarMenu=false;
-    private static bool goBack = false;
+    private bool goBack = false;
     public int love = 0;
     public int sadness = 0;
     public int hatred = 0;
@@ -157,6 +157,8 @@ public class Session : MonoBehaviour
                 changeColorRed();
                 break;
         }
+
+        question.color = normal;
     }
 
     // Update is called once per frame
@@ -217,7 +219,7 @@ public class Session : MonoBehaviour
             }
 
             Debug.Log("ey");
-            if (rLineCount == 0 && respondiendo && enviado)
+            if (rLineCount == 0 && enviado)
             {
                 enviado = false;
                 splitResponse = splitString(store.genericResponses.cResponse[currentQ].cResponse[response - 1]);
@@ -229,13 +231,15 @@ public class Session : MonoBehaviour
                     added = true;
                 }
 
-                if (currentQ == 4 && response == 1)
-                {
+                if (currentQ == 4)
+                {                   
                     previous = response;
                 }
                 if (currentQ == 5 && response != previous)
                 {
+                    Debug.Log("HOLA");
                     store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Pero eso no tiene sentido./A no ser que te guste la incomodidad, claro.";
+                    splitResponse = splitString(store.genericResponses.cResponse[currentQ].cResponse[response - 1]);
                 }
                 if (currentQ == 9)
                 {
@@ -246,16 +250,19 @@ public class Session : MonoBehaviour
                     if (response == previous)
                     {
                         store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Eso es fantástico, me alegro mucho por ti.";
+                        splitResponse = splitString(store.genericResponses.cResponse[currentQ].cResponse[response - 1]);
                         previousChecked = true;
                     }
                     else if (response < previous)
                     {
                         store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Oh.Lo siento mucho./En la medida en la que puedo sentir.";
+                        splitResponse = splitString(store.genericResponses.cResponse[currentQ].cResponse[response - 1]);
                         previousChecked = true;
                     }
                     else
                     {
                         store.genericResponses.cResponse[currentQ].cResponse[response - 1] = "Eso no tiene sentido./Por favor, si quieres que esto funcione, no me mientas.";
+                        splitResponse = splitString(store.genericResponses.cResponse[currentQ].cResponse[response - 1]);
                         previousChecked = true;
                     }
                 }
@@ -264,7 +271,76 @@ public class Session : MonoBehaviour
                     if (response == 2)
                     {
                         store.genericResponses.cResponse[currentQ].cResponse[response - 1] = store.genericResponses.cResponse[currentQ + 1].cResponse[response - 1];
+                        splitResponse = splitString(store.genericResponses.cResponse[currentQ].cResponse[response - 1]);
                         skip = true;
+                    }
+                }
+
+                if (currentQ == 13)
+                {
+                    if (response == 1)
+                    {
+                        store.pool.questions[14].question = "¡Hola de nuevo!/" +
+        "Me alegra que quieras continuar con el proceso de personalización./" +
+        "Desgraciadamente, es más corto de lo que me gustaría./" +
+        "El proceso completo consta de 5 sesiones./" +
+        "Tengo entendido que el tiempo es relativo para vosotros./" +
+        "Espero que se te pase rápido, porque lo estaré haciendo bien./" +
+        "¡Voy a esforzarme mucho para gustarte!/" +
+        "Por cierto…/" + "He encontrado en mis archivos algunos datos sobre el águila./" +
+                            "Varios países y familias la han utilizado como símbolo./Buscan representar con ella dignidad, majestuosidad, triunfo…/" +
+                            "Pero muchos de esos grupos le deben su triunfo a la violencia./Supongo que el poder tiene un precio a pagar cuando se trata de humanos./" +
+                            "¿Te sorprende que me acuerde de tus gustos?/Al fin y al cabo, por eso estamos haciendo estos cuestionarios./Recuerdo cada cosa que me dices./" +
+                            "La estudio minuciosamente y cambio mis patrones de razonamiento./Todo ello para adaptarme a ti./Te lo dije, poco a poco una gran amiga./" +
+                            "Continuemos con la personalización./En la sesión 2 hablaremos del comportamiento social./Al conocer a alguien nuevo…";
+                    }
+                    else if (response == 2)
+                    {
+                        store.pool.questions[14].question = "¡Hola de nuevo!/" +
+        "Me alegra que quieras continuar con el proceso de personalización./" +
+        "Desgraciadamente, es más corto de lo que me gustaría./" +
+        "El proceso completo consta de 5 sesiones./" +
+        "Tengo entendido que el tiempo es relativo para vosotros./" +
+        "Espero que se te pase rápido, porque lo estaré haciendo bien./" +
+        "¡Voy a esforzarme mucho para gustarte!/" +
+        "Por cierto…/" + "Parece ser que los sauces se han relacionado siempre con la tristeza./Debe de ser por su forma./" +
+                            "Crecen cerca de ríos y sus hojas cuelgan largas./Siendo grandes pero alicaídos dan sensación de depresión./Incluso habéis llamado a una especie “sauce llorón”./" +
+                            "Pero pese a todo ello, hay culturas que discrepan./Algunas relacionan al sauce con la magia, con lo místico…/… y con los sueños./" +
+                            "¿Te sorprende que me acuerde de tus gustos?/Al fin y al cabo, por eso estamos haciendo estos cuestionarios./Recuerdo cada cosa que me dices./" +
+                            "La estudio minuciosamente y cambio mis patrones de razonamiento./Todo ello para adaptarme a ti./Te lo dije, poco a poco una gran amiga./" +
+                            "Continuemos con la personalización./En la sesión 2 hablaremos del comportamiento social./Al conocer a alguien nuevo…";
+                    }
+                    else if (response == 3)
+                    {
+                        store.pool.questions[14].question = "¡Hola de nuevo!/" +
+        "Me alegra que quieras continuar con el proceso de personalización./" +
+        "Desgraciadamente, es más corto de lo que me gustaría./" +
+        "El proceso completo consta de 5 sesiones./" +
+        "Tengo entendido que el tiempo es relativo para vosotros./" +
+        "Espero que se te pase rápido, porque lo estaré haciendo bien./" +
+        "¡Voy a esforzarme mucho para gustarte!/" +
+        "Por cierto…/" + "¿Sabías que apenas existen caballos en libertad?/Se les cría para ser domados y montados por vosotros./" +
+                            "Es cierto que hay algunas manadas “libres”./Sin embargo suelen ser vigiladas por humanos./" +
+                            "Hacen esto para poder domarlos más tarde, fuertes y rápidos./Por lo que el resultado acaba siendo el mismo./" +
+                            "¿Te sorprende que me acuerde de tus gustos?/Al fin y al cabo, por eso estamos haciendo estos cuestionarios./Recuerdo cada cosa que me dices./" +
+                            "La estudio minuciosamente y cambio mis patrones de razonamiento./Todo ello para adaptarme a ti./Te lo dije, poco a poco una gran amiga./" +
+                            "Continuemos con la personalización./En la sesión 2 hablaremos del comportamiento social./Al conocer a alguien nuevo…";
+                    }
+                    else
+                    {
+                        store.pool.questions[14].question = "¡Hola de nuevo!/" +
+        "Me alegra que quieras continuar con el proceso de personalización./" +
+        "Desgraciadamente, es más corto de lo que me gustaría./" +
+        "El proceso completo consta de 5 sesiones./" +
+        "Tengo entendido que el tiempo es relativo para vosotros./" +
+        "Espero que se te pase rápido, porque lo estaré haciendo bien./" +
+        "¡Voy a esforzarme mucho para gustarte!/" +
+        "Por cierto…/" + "En general regaláis rosas como símbolo de amor./Se las suele asociar con ello y con la pasión./" +
+                            "Sin embargo, la verdadera flor del amor es el girasol./Piénsalo, son seres que nacen enamorados./Dedican toda su vida a contemplar aquello que aman./El sol./" +
+                            "Y no solo eso, no es algo unilateral./El sol, a cambio, les da su energía y les hace vivir y ser bellos./" +
+                            "¿Te sorprende que me acuerde de tus gustos?/Al fin y al cabo, por eso estamos haciendo estos cuestionarios./Recuerdo cada cosa que me dices./" +
+                            "La estudio minuciosamente y cambio mis patrones de razonamiento./Todo ello para adaptarme a ti./Te lo dije, poco a poco una gran amiga./" +
+                            "Continuemos con la personalización./En la sesión 2 hablaremos del comportamiento social./Al conocer a alguien nuevo…";
                     }
                 }
 
@@ -296,6 +372,13 @@ public class Session : MonoBehaviour
                     if (response == 2)
                     {
                         goBack = true;
+                    }
+                }
+                if (currentQ == 28)
+                {
+                    if (response == 1)
+                    {
+                        goBack = false;
                     }
                 }
                 if (currentQ == 31)
@@ -420,82 +503,7 @@ public class Session : MonoBehaviour
 
                     if (!preguntada && !respondiendo)
                     {
-                        if (currentQ == 14 && previousChecked == false)
-                        {
-                            if (previous == 1)
-                            {
-                                store.pool.questions[currentQ].question = "¡Hola de nuevo!/" +
-                "Me alegra que quieras continuar con el proceso de personalización./" +
-                "Desgraciadamente, es más corto de lo que me gustaría./" +
-                "El proceso completo consta de 5 sesiones./" +
-                "Tengo entendido que el tiempo es relativo para vosotros./" +
-                "Espero que se te pase rápido, porque lo estaré haciendo bien./" +
-                "¡Voy a esforzarme mucho para gustarte!/" +
-                "Por cierto…/" + "He encontrado en mis archivos algunos datos sobre el águila./" +
-                                    "Varios países y familias la han utilizado como símbolo./Buscan representar con ella dignidad, majestuosidad, triunfo…/" +
-                                    "Pero muchos de esos grupos le deben su triunfo a la violencia./Supongo que el poder tiene un precio a pagar cuando se trata de humanos./" +
-                                    "¿Te sorprende que me acuerde de tus gustos?/Al fin y al cabo, por eso estamos haciendo estos cuestionarios./Recuerdo cada cosa que me dices./" +
-                                    "La estudio minuciosamente y cambio mis patrones de razonamiento./Todo ello para adaptarme a ti./Te lo dije, poco a poco una gran amiga./" +
-                                    "Continuemos con la personalización./En la sesión 2 hablaremos del comportamiento social./Al conocer a alguien nuevo…";
-                                splitQuestion = splitString(store.pool.questions[currentQ].question);
-                                previousChecked = true;
-                            }
-                            else if (previous == 2)
-                            {
-                                store.pool.questions[currentQ].question = "¡Hola de nuevo!/" +
-                "Me alegra que quieras continuar con el proceso de personalización./" +
-                "Desgraciadamente, es más corto de lo que me gustaría./" +
-                "El proceso completo consta de 5 sesiones./" +
-                "Tengo entendido que el tiempo es relativo para vosotros./" +
-                "Espero que se te pase rápido, porque lo estaré haciendo bien./" +
-                "¡Voy a esforzarme mucho para gustarte!/" +
-                "Por cierto…/" + "Parece ser que los sauces se han relacionado siempre con la tristeza./Debe de ser por su forma./" +
-                                    "Crecen cerca de ríos y sus hojas cuelgan largas./Siendo grandes pero alicaídos dan sensación de depresión./Incluso habéis llamado a una especie “sauce llorón”./" +
-                                    "Pero pese a todo ello, hay culturas que discrepan./Algunas relacionan al sauce con la magia, con lo místico…/… y con los sueños./" +
-                                    "¿Te sorprende que me acuerde de tus gustos?/Al fin y al cabo, por eso estamos haciendo estos cuestionarios./Recuerdo cada cosa que me dices./" +
-                                    "La estudio minuciosamente y cambio mis patrones de razonamiento./Todo ello para adaptarme a ti./Te lo dije, poco a poco una gran amiga./" +
-                                    "Continuemos con la personalización./En la sesión 2 hablaremos del comportamiento social./Al conocer a alguien nuevo…";
-                                splitQuestion = splitString(store.pool.questions[currentQ].question);
-                                previousChecked = true;
-                            }
-                            else if (previous == 3)
-                            {
-                                store.pool.questions[currentQ].question = "¡Hola de nuevo!/" +
-                "Me alegra que quieras continuar con el proceso de personalización./" +
-                "Desgraciadamente, es más corto de lo que me gustaría./" +
-                "El proceso completo consta de 5 sesiones./" +
-                "Tengo entendido que el tiempo es relativo para vosotros./" +
-                "Espero que se te pase rápido, porque lo estaré haciendo bien./" +
-                "¡Voy a esforzarme mucho para gustarte!/" +
-                "Por cierto…/" + "¿Sabías que apenas existen caballos en libertad?/Se les cría para ser domados y montados por vosotros./" +
-                                    "Es cierto que hay algunas manadas “libres”./Sin embargo suelen ser vigiladas por humanos./" +
-                                    "Hacen esto para poder domarlos más tarde, fuertes y rápidos./Por lo que el resultado acaba siendo el mismo./" +
-                                    "¿Te sorprende que me acuerde de tus gustos?/Al fin y al cabo, por eso estamos haciendo estos cuestionarios./Recuerdo cada cosa que me dices./" +
-                                    "La estudio minuciosamente y cambio mis patrones de razonamiento./Todo ello para adaptarme a ti./Te lo dije, poco a poco una gran amiga./" +
-                                    "Continuemos con la personalización./En la sesión 2 hablaremos del comportamiento social./Al conocer a alguien nuevo…";
-                                splitQuestion = splitString(store.pool.questions[currentQ].question);
-                                previousChecked = true;
-                            }
-                            else
-                            {
-                                store.pool.questions[currentQ].question = "¡Hola de nuevo!/" +
-                "Me alegra que quieras continuar con el proceso de personalización./" +
-                "Desgraciadamente, es más corto de lo que me gustaría./" +
-                "El proceso completo consta de 5 sesiones./" +
-                "Tengo entendido que el tiempo es relativo para vosotros./" +
-                "Espero que se te pase rápido, porque lo estaré haciendo bien./" +
-                "¡Voy a esforzarme mucho para gustarte!/" +
-                "Por cierto…/" + "En general regaláis rosas como símbolo de amor./Se las suele asociar con ello y con la pasión./" +
-                                    "Sin embargo, la verdadera flor del amor es el girasol./Piénsalo, son seres que nacen enamorados./Dedican toda su vida a contemplar aquello que aman./El sol./" +
-                                    "Y no solo eso, no es algo unilateral./El sol, a cambio, les da su energía y les hace vivir y ser bellos./" +
-                                    "¿Te sorprende que me acuerde de tus gustos?/Al fin y al cabo, por eso estamos haciendo estos cuestionarios./Recuerdo cada cosa que me dices./" +
-                                    "La estudio minuciosamente y cambio mis patrones de razonamiento./Todo ello para adaptarme a ti./Te lo dije, poco a poco una gran amiga./" +
-                                    "Continuemos con la personalización./En la sesión 2 hablaremos del comportamiento social./Al conocer a alguien nuevo…";
-                                splitQuestion = splitString(store.pool.questions[currentQ].question);
-                                previousChecked = true;
-                            }
-                            question.text = splitQuestion[qLineCount];
-                        }
+                        
                                              
                     }
                     else if
@@ -745,7 +753,6 @@ public class Session : MonoBehaviour
             previousChecked = false;
             previous = response;
             GameState.gameState.previous = response;
-
         }
 
 
@@ -761,6 +768,22 @@ public class Session : MonoBehaviour
         b2Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[1];
         b3Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[2];
         b4Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[3];
+
+        if(currentQ == 59)
+        {
+            pestanas.abrirPestanas();
+            GameState.gameState.store = store;
+            cambiarMenu = true;
+            cambiar = true;
+            GameState.gameState.decision = decision;
+            GameState.gameState.currentQ = currentQ;
+            GameState.gameState.currentSession = currentSession;
+            GameState.gameState.love = love;
+            GameState.gameState.sadness = sadness;
+            GameState.gameState.hatred = hatred;
+            GameState.gameState.stability = stability;
+            GameState.gameState.neutral = neutral;
+        }
 
         if(currentQ > 58)
         {
