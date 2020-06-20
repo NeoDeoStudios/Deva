@@ -485,7 +485,7 @@ public class Session : MonoBehaviour
             }
             if (devaClicked && !respondiendo && !desactivar)
                 {
-                devaClicked = false;
+                
                     if (qLineCount == splitQuestion.Length - 1 && !preguntada)
                     {
                         respondiendo = true;
@@ -608,12 +608,13 @@ public class Session : MonoBehaviour
                         respondiendo = false;
                         enviado = false;
                         changeQuestion();
-                        deva.GetComponentInChildren<Button>().interactable = false;
+                        //deva.GetComponentInChildren<Button>().interactable = false;
                     }
                 }
 
-                    
-                }
+                devaClicked = false;
+                devaClicked = false;
+            }
 
                 /*if (qLineCount < splitQuestion.Length)
                 {
@@ -965,7 +966,7 @@ public class Session : MonoBehaviour
                 nextQ = false;
                 asked = false;
                 changeQuestion();
-                deva.GetComponentInChildren<Button>().interactable = false;
+                //deva.GetComponentInChildren<Button>().interactable = false;
             }
             else { }
         }
@@ -973,7 +974,10 @@ public class Session : MonoBehaviour
 
     public void clickDeva()
     {
-        devaClicked = true;
+        if (!respondiendo)
+        {
+            devaClicked = true;
+        }
     }
 
     void PlaySound()
