@@ -555,18 +555,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 760352309}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1011449166}
-        m_MethodName: clickScreen
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &760352309
@@ -1064,6 +1053,7 @@ MonoBehaviour:
   emotions: 
   clip: {fileID: 8300000, guid: ce0c1e9f4c6c9f2498aa806907e7184c, type: 3}
   cambiar: 0
+  devaButton: {fileID: 0}
 --- !u!114 &923799562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1170,6 +1160,7 @@ MonoBehaviour:
   emotions: 
   clip: {fileID: 8300000, guid: ce0c1e9f4c6c9f2498aa806907e7184c, type: 3}
   cambiar: 0
+  devaButton: {fileID: 0}
 --- !u!114 &923799567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1193,6 +1184,7 @@ MonoBehaviour:
   emotions: 
   clip: {fileID: 8300000, guid: ce0c1e9f4c6c9f2498aa806907e7184c, type: 3}
   cambiar: 0
+  devaButton: {fileID: 0}
 --- !u!114 &923799568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1304,6 +1296,7 @@ MonoBehaviour:
   emotions: 
   clip: {fileID: 8300000, guid: ce0c1e9f4c6c9f2498aa806907e7184c, type: 3}
   cambiar: 0
+  devaButton: {fileID: 760352308}
 --- !u!1 &1401374318
 GameObject:
   m_ObjectHideFlags: 0

@@ -48,6 +48,7 @@ public class Session : MonoBehaviour
     public List<int> emotions;
     string decision;
     private bool added = false;
+    private bool devaClicked = false;
     Color normal;
     Color highlight;
     Color clear;
@@ -57,6 +58,7 @@ public class Session : MonoBehaviour
     public AudioSource source { get { return GetComponent<AudioSource>(); } }
     public AudioClip clip;
     public bool cambiar = false;
+    public Button devaButton;
 
     void Start()
     {
@@ -68,6 +70,8 @@ public class Session : MonoBehaviour
         hatred = GameState.gameState.hatred;
         stability = GameState.gameState.stability;
         neutral = GameState.gameState.neutral;
+
+        devaButton.onClick.AddListener(clickDeva);
 
         desactivar = false;
 
@@ -116,7 +120,7 @@ public class Session : MonoBehaviour
         b4Text.GetComponentInChildren<Text>().color = clear;
 
 
-        deva.GetComponentInChildren<Button>().interactable = false;
+        deva.GetComponentInChildren<Button>().interactable = true;
 
         b1Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[0];
         b2Text.GetComponentInChildren<Text>().text = store.pool.questions[currentQ].answer[1];
@@ -479,8 +483,9 @@ public class Session : MonoBehaviour
                 b3Text.GetComponentInChildren<Text>().color = clear;
                 b4Text.GetComponentInChildren<Text>().color = clear;
             }
-            if (Input.GetMouseButtonDown(0) && !respondiendo && !desactivar)
+            if (devaClicked && !respondiendo && !desactivar)
                 {
+                devaClicked = false;
                     if (qLineCount == splitQuestion.Length - 1 && !preguntada)
                     {
                         respondiendo = true;
@@ -964,6 +969,11 @@ public class Session : MonoBehaviour
             }
             else { }
         }
+    }
+
+    public void clickDeva()
+    {
+        devaClicked = true;
     }
 
     void PlaySound()
